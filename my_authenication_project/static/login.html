@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Login</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+	<div class="container RegisterPage" style="height: 100vh; width: 100vw;">
+		
+		<form id="reg-form" style="width: 400px;">
+			<h1>Login</h1>
+			<br>
+			<input type="text" autocomplete="off" id="username" placeholder="Username" />
+			<input type="password" autocomplete="off" id="password" placeholder="Password"/>
+			<input type="submit" value="Submit Form" id="SubmitRegisterButton" />
+			<br>
+			<a style="text-decoration: none;" href="/register">Register</a>
+		</form>
+	</div>
+	<script>
+
+		if(localStorage.getItem('email')!=null)	window.location.href='/dashboard';
+
+		const form = document.getElementById('reg-form');
+		form.addEventListener('submit', login);
+
+		async function login(event) {
+			event.preventDefault()
+			const username = document.getElementById('username').value;
+			const password = document.getElementById('password').value;
+			const result = await fetch('/api/login', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					username,
+					password
+				})
+			}).then((res) => {
+				console.log(res.data);
+
+				return res.json();
+			})
+
+			if (result.status === 'ok') {
+				// everythign went fine
+				console.log(result);
+				console.log('Got the token: ', result.data.token)
+				localStorage.setItem('token', result.data.token);
+				localStorage.setItem('email',result.data.email);
+				
+				location.href = '/dashboard';
+				
+			} else {
+				alert(result.error);
+			}
+		}
+	</script>
+</body>
+
+</html>

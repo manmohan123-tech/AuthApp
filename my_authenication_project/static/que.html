@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Details</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h2 style="text-align: center;">Enter your details to proceed...</h2>
+    <form id="reg-form" style="width: 400px; ">
+        
+        <div class="AllQuestions" id="FullNameSet" >
+            <h3 style="text-align: center;">Enter your full name</h3>
+            <input type="text" autocomplete="off" id="fullname" placeholder="Full Name" /><br>
+            <div style="display: flex; align-items: center; margin-top: 1rem;" id="ButtonsPreviousNext">
+                <button type="button" style="margin-left: auto;" onclick="getNext(0)">Next</button>
+            </div>
+        </div>
+
+        <div class="AllQuestions hidethis" id="FoodSet">
+            <h3 style="text-align: center;">Favourite Food</h3>
+            <input type="text" autocomplete="off" id="food" placeholder="Favourite Food" /><br>
+            <div style="display: flex; align-items: center; margin-top: 1rem;" id="ButtonsPreviousNext">
+                <button type="button" onclick="getPrevious(1)">Previous</button>
+                <button  type="button" style="margin-left: auto;" onclick="getNext(1)">Next</button>
+            </div>
+        </div>
+        <div class="AllQuestions hidethis" id="MovieSet">
+            <h3 style="text-align: center;">Favourite Movie</h3>
+            <input type="text" autocomplete="off" id="movie" placeholder="Favourite Movie" /><br>
+            <div style="display: flex; align-items: center; margin-top: 1rem;" id="ButtonsPreviousNext">
+                <button type="button" onclick="getPrevious(2)">Previous</button>
+                <button type="button" style="margin-left: auto;" onclick="getNext(2)">Next</button>
+            </div>
+        </div>
+        <div class="AllQuestions hidethis" id="AgeSet">
+            <h3 style="text-align: center;">Enter your age</h3>
+            <input type="number" autocomplete="off" id="age" placeholder=""  /><br>
+            <div style="display: flex; align-items: center; margin-top: 1rem;" id="ButtonsPreviousNext">
+                <button type="button" onclick="getPrevious(3)">Previous</button>
+                <button type="submit" id="SubmitQuestionsButton"  >Submit</button>
+            </div>
+        </div>
+    </form>
+
+    <script>
+
+        if(localStorage.getItem('email')==null) window.location.href='/'; 
+
+        const form = document.getElementById('reg-form');
+        form.addEventListener('submit', answer);
+        
+        async function answer(event) {
+            event.preventDefault();
+            
+            saveLast();
+            console.log(Answers);
+            
+            const result = await fetch('/api/fullNameDetail', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                   fullName : Answers[0],
+                    food : Answers[1],
+                    movie : Answers[2],
+                    age : Answers[3],
+                    email:localStorage.getItem('email'),
+                })
+            }).then((res) => res.json())
+
+            if (result.status === 'ok') {
+                // everythign went fine
+
+                alert('Success');
+                window.location.href='/';
+            } else {
+                alert(result.error)
+            }
+        }
+
+        let Options = ["FullNameSet","FoodSet","MovieSet","AgeSet"];
+        let Answers = ['','','',0];
+
+        function saveLast(x){
+            Answers[3] = document.getElementById(Options[3]).firstElementChild.nextElementSibling.value;
+            return ;
+        }
+
+        function getNext(x){
+            let zx = document.getElementById(Options[x]);
+            let element = zx.firstElementChild.nextElementSibling;
+            Answers[x]=element.value;
+            zx.classList.add('hidethis');
+            document.getElementById(Options[x+1]).classList.remove('hidethis');
+        }
+        function getPrevious(x){
+            
+            let zx = document.getElementById(Options[x]);
+            let element = zx.firstElementChild.nextElementSibling;
+            Answers[x] = element.value;
+            zx.classList.add('hidethis');
+            document.getElementById(Options[x-1]).classList.remove('hidethis');
+        }
+    </script>
+</body>
+
+</html>

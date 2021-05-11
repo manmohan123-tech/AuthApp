@@ -1,0 +1,59 @@
+body{
+    background-color: oldlace;
+    padding: 0;
+    margin: 0;
+}
+
+h1{
+    text-align: center;
+    margin: auto;
+}
+
+#reg-form input{
+    padding: 0.5rem;
+    border:1px solid #0f0f0f;
+    border-radius: 5px;
+    width: 400px;
+    margin: 0.5rem 0;
+    box-sizing: border-box;
+
+}
+#reg-form input:hover, #reg-form input:active,#reg-form input:focus{
+    border: 1px solid black;
+}
+#reg-form input:last-child{
+    margin-top: 1rem;
+}
+#SubmitRegisterButton{
+    width: fit-content !important;
+    background-color: teal;
+    color: white;
+}
+
+#reg-form{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.hidethis{
+    display: none;
+}
+
+.visible{
+    display: block;
+    transition: all 0.5s ease-in-out;
+}
+
+#ButtonsPreviousNext button{
+    padding: 0.5rem;
+    margin-top: 1rem;
+}
+#SubmitQuestionsButton{
+    margin-left: auto;
+    background-color: teal;
+    color: white;
+    border-radius: 5px;
+    border: 1px solid black;
+}

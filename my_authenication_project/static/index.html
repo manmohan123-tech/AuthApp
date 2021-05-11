@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Sign Up</title>
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+	<div class="container RegisterPage" style="height: 100vh; width: 100vw;">
+		
+		<form id="reg-form" style="width: 400px;">
+			<h1>Sign Up</h1>
+			<br>
+			<input type="text" autocomplete="off" id="username" placeholder="Enter your Username" required>
+			<input type="e-mail" autocomplete="off" id="email" placeholder="Enter your Email" required>
+			<input type="password" autocomplete="off" id="password" placeholder="Enter your Password" required />
+			<input type="submit" value="Submit Form" id="SubmitRegisterButton" />
+			<br>
+			<a style="text-decoration: none;" href="/login">Login</a>
+		</form>
+		
+	</div>
+
+	<script>
+
+		if(localStorage.getItem('email')!=null)		window.location.href = '/Dashboard';
+
+		const form = document.getElementById('reg-form');
+		form.addEventListener('submit', registerUser);
+
+		async function registerUser(event) {
+			event.preventDefault()
+			const username = document.getElementById('username').value
+			const email = document.getElementById('email').value
+			const password = document.getElementById('password').value
+
+			console.log(username, email,password);
+
+			const result = await fetch('/api/register', {
+				method: 'POST',
+				headers: {'Content-Type': 'application/json'},
+				body: JSON.stringify({username,email,password}
+				)}
+				).then((res) => res.json())
+
+			if (result.status === 'ok') {
+				alert('Success');
+				localStorage.setItem('email',email);
+				window.location.href = '/fullNamedetail';
+			} else {
+				alert(result.error + ". \nEmail and username must be unique.");
+			}
+		}
+	</script>
+</body>
+
+</html>
